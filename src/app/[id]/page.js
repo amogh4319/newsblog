@@ -29,4 +29,36 @@ function meetupDetails({params}){
         </div>
     )
 }
+export function getStaticPath(){
+    return {
+        fallback:false,
+        paths:[
+        {
+            params:{
+                meetupId:'1'
+            }
+        },
+        {
+            params:{
+                meetupId:'2'
+            }
+        }
+        ]
+        
+    }
+}
+export async function getStaticProps(context){
+    const meetupId=context.params.id
+    return {
+        props:{
+            meetupData:{
+                id:meetupId,
+                title:DUMMY_MEETUPS.title,
+                description:DUMMY_MEETUPS.description,
+                image:DUMMY_MEETUPS.image,
+                address:DUMMY_MEETUPS.address
+            }
+        }
+    }
+}
 export default meetupDetails;
