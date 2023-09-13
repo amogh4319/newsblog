@@ -7,6 +7,7 @@ import classes from './MeetupItem.module.css';
 function MeetupItem(props) {
   const showDetails=()=>{
     console.log('clicked');
+    console.log(props._id)
   }
  
   return (
@@ -20,7 +21,7 @@ function MeetupItem(props) {
           <address>{props.address}</address>
         </div>
         <div className={classes.actions}>
-          <button><Link href={`/${props._id}`}>Show Details</Link></button>
+          <button><Link href={`/${props._id}`}onClick={showDetails}>Show Details</Link></button>
         </div>
       </Card>
     </li>

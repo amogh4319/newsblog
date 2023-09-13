@@ -1,64 +1,53 @@
+"use client"
+import React, { useState, useEffect } from "react";
 
-const DUMMY_MEETUPS=[
-    {
-      id:1,
-      title:'First meetup',
-      image:'https://i.pinimg.com/originals/67/58/c6/6758c60833751880c2accfb70e84bb55.jpg',
-      description:'this is my first meeting place',
-      address:'Road no 4,guttenberg street,Rome'
-    },
-    {
-      id:2,
-      title:'Second meetup',
-      image:'https://thumbs.dreamstime.com/b/madrid-spain-september-beautiful-historical-building-old-architecture-city-center-copy-space-text-105480199.jpg',
-      description:'this is my second meeting place',
-      address:'Road no 10,albert enstien street,Spain'
+export default function Page({ params }) {
+  const [meetupDetails, setMeetupDetails] = useState(null); // Initialize as null
+  console.log(params);
+
+  useEffect(() => {
+    async function fetchMeetupData() {
+      try {
+        const response = await fetch('/api/newmeetup');
+        console.log(response);
+        if (!response.ok) {
+          throw new Error('Meetup not found');
+        }
+        const data = await response.json();
+        console.log(data);
+
+        // Use Array.find to find the meetup by _id
+        const meetupData = data.find((meetupdata) => meetupdata._id === params.id);
+
+        console.log(meetupData);
+        setMeetupDetails(meetupData);
+      } catch (error) {
+        console.error('Error fetching meetup details:', error);
+        // Handle errors or display a message here
+      }
     }
-  ]
-  
-function meetupDetails({params}){
-    const id=params.id;
-    const Details=DUMMY_MEETUPS.find((item)=>item.id===parseInt(id))
-    return (
-        <div style={{textAlign:'center'}} className="mt-5">
-            <img src={Details.image} alt={Details.title} height={'500px'} width={'500px'}/>
-            <h1>{Details.title}</h1>
-            <p>{Details.description}</p>
-            <address>{Details.address}</address>
-            
-        </div>
-    )
-}
-// export function getStaticPaths(){
-//     return {
-//         fallback:false,
-//         paths:[
-//         {
-//             params:{
-//                 meetupId:'1'
-//             }
-//         },
-//         {
-//             params:{
-//                 meetupId:'2'
-//             }
-//         }
-//         ]
+
+    if (params.id) {
+      // Ensure params.id is defined before making the fetch request
+      fetchMeetupData();
+    }
+  }, [params.id]); // Include params.id as a dependency
+
+  // Render a loading message while data is being fetched
+  if (!meetupDetails) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <div style={{textAlign:'center'}}>
+      <h2>Meetup Details</h2>
+      <div>
+        <img src={meetupDetails.image} alt={meetupDetails.title} height={'500px'} width={'500px'}/>
+        <h3>{meetupDetails.title}</h3>
+        <p><i>{meetupDetails.description}</i></p>
+        <p>{meetupDetails.address}</p>
         
-//     }
-// }
-// export async function getStaticProps(context){
-//     const meetupId=context.params.id
-//     return {
-//         props:{
-//             meetupData:{
-//                 id:meetupId,
-//                 title:DUMMY_MEETUPS.title,
-//                 description:DUMMY_MEETUPS.description,
-//                 image:DUMMY_MEETUPS.image,
-//                 address:DUMMY_MEETUPS.address
-//             }
-//         }
-//     }
-// }
-export default meetupDetails;
+      </div>
+    </div>
+  );
+}
