@@ -1,4 +1,6 @@
 "use client";
+import { Fragment } from "react";
+import  Head  from "next/head";
 import MeetupList from "../components/meetups/MeetupList";
 import Layout from "../components/layout/Layout";
 import React,{useState,useEffect} from "react";
@@ -27,9 +29,15 @@ import React,{useState,useEffect} from "react";
 
 
   return (
+    <Fragment>
+      
     <Layout>
+    <Head>
+        <title>React meetups</title>
+      </Head>
     <MeetupList meetups={meetups}/>
     </Layout>
+    </Fragment>
   )
 }
 

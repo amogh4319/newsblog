@@ -1,5 +1,6 @@
 "use client"
-import React, { useState, useEffect } from "react";
+import Head from "next/head";
+import React, { useState, useEffect, Fragment } from "react";
 
 export default function Page({ params }) {
   const [meetupDetails, setMeetupDetails] = useState(null); // Initialize as null
@@ -39,6 +40,11 @@ export default function Page({ params }) {
   }
 
   return (
+    <Fragment>
+        <Head>
+            <title>{meetupDetails.title}</title>
+            <meta name='description' content={meetupDetails.description}/>
+        </Head>
     <div style={{textAlign:'center'}}>
       <h2>Meetup Details</h2>
       <div>
@@ -49,5 +55,6 @@ export default function Page({ params }) {
         
       </div>
     </div>
+    </Fragment>
   );
 }
